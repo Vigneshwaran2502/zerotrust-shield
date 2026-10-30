@@ -1,5 +1,12 @@
 # ZeroTrust Campus — Cloudflare Zero Trust Security Integration
 
+[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare_Workers-Live_Deployment-F38020?logo=cloudflare&logoColor=white)](https://zerotrust-campus.vigneshwaran7002.workers.dev/)
+[![Cloudflare D1](https://img.shields.io/badge/Cloudflare_D1-Serverless_SQL-F38020?logo=cloudflare&logoColor=white)](https://zerotrust-campus.vigneshwaran7002.workers.dev/)
+[![Zero Trust Access](https://img.shields.io/badge/Zero_Trust-Access_Enforced-2F80ED?logo=cloudflare&logoColor=white)](https://zerotrust-campus.vigneshwaran7002.workers.dev/)
+
+> 🌐 **Live Production URL:**  
+> **[https://zerotrust-campus.vigneshwaran7002.workers.dev/](https://zerotrust-campus.vigneshwaran7002.workers.dev/)**
+
 **ZeroTrust Campus** is an enterprise-grade university portal demonstrating practical Zero Trust security architecture, multi-layer identity verification, server-side role-based access control (RBAC), and tamper-resistant security audit logging.
 
 ---
@@ -141,12 +148,34 @@ Frontend runs at `http://localhost:5173`, proxying API requests to `http://local
 
 ---
 
-## 6. Cloudflare Zero Trust Production Deployment
+## 6. Production Deployment Options
 
-### Architecture Recommendation
-We recommend keeping the Node.js/Express backend and SQLite database running as a private service behind **Cloudflare Tunnel (`cloudflared`)**. This provides:
+### Option A: Cloudflare Workers + D1 Serverless Edge (Live Deployment)
+
+The portal can run fully serverless on Cloudflare's global edge network using Cloudflare Workers, Static Assets, and Cloudflare D1 (serverless SQLite):
+
+- **Live URL:** [https://zerotrust-campus.vigneshwaran7002.workers.dev/](https://zerotrust-campus.vigneshwaran7002.workers.dev/)
+- **Worker Configuration:** [wrangler.jsonc](file:///d:/Cloudflare/wrangler.jsonc)
+- **API Entrypoint:** [src/worker.js](file:///d:/Cloudflare/src/worker.js)
+- **Database:** Cloudflare D1 (`zerotrust_shield_db` / `zerotrust-shield-db`)
+- **Static Assets:** React SPA served directly from `dist/` via Workers Assets
+
+#### Deploying with Wrangler:
+```bash
+# 1. Build frontend bundle
+npm run build
+
+# 2. Deploy to Cloudflare Workers
+npx wrangler deploy
+```
+
+---
+
+### Option B: Private Origin behind Cloudflare Tunnel (`cloudflared`)
+
+For environments hosting a traditional Node.js/Express service, the backend can remain private on an internal host behind **Cloudflare Tunnel (`cloudflared`)**:
 - Zero public ingress ports on the host.
-- Full compatibility with existing SQLite and Node.js dependencies without requiring architectural rewrites to Cloudflare Workers / D1.
+- Encrypted outbound tunnel to Cloudflare's edge with Access policies enforced.
 - Complete edge DDoS protection and Cloudflare Access authentication at the edge.
 
 ### Step 1: Create a Cloudflare Tunnel
