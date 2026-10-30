@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Wrangler & Cloudflare build artifacts
+.wrangler/
+.mf/
+
+# Executables & Binaries
+*.exe
+cloudflared/cloudflared.exe
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+.dev.vars
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# SQLite Databases & Backups
+*.sqlite*
+*.db*
+*.bak*
+*.backup*
+d1-seed.sql
+backend/*.sqlite*
+backend/*.bak*

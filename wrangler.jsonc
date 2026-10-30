@@ -1,0 +1,27 @@
+{
+	"name": "zerotrust-campus",
+	"compatibility_date": "2026-10-08",
+	// Worker script — handles /api/* proxy and serves static assets
+	"main": "src/worker.js",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"not_found_handling": "single-page-application"
+	},
+	"d1_databases": [
+		{
+			"binding": "zerotrust_shield_db",
+			"database_name": "zerotrust-shield-db",
+			"database_id": "cf5a4346-f584-4d84-a446-61e6a2008a57"
+		}
+	],
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"vars": {
+		"CLOUDFLARE_ACCESS_TEAM_DOMAIN": "still-meadow-8113.cloudflareaccess.com",
+		"CLOUDFLARE_ACCESS_AUD": "c21fe808f7e3906e3c2c8e50c0bd6236da3b5de07c83bcdceb19426dd96d7b69",
+		"ADMIN_EMAILS": "vigneshwaran7002@gmail.com,admin@zerotrustcampus.edu",
+		"ALLOW_LOCAL_AUTH": "false"
+	}
+}

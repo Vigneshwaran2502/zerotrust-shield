@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cf-dark text-slate-200 antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-cf-card/90 backdrop-blur-lg border border-cf-border shadow-2xl rounded-xl;
+  }
+  
+  .btn-primary {
+    @apply px-4 py-2 bg-cf-orange text-white rounded-md font-medium hover:bg-cf-accent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cf-orange focus:ring-offset-2 focus:ring-offset-cf-dark;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-transparent border border-cf-border text-slate-300 rounded-md font-medium hover:bg-cf-border/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-cf-dark;
+  }
+}
+
+/* Subtle animations */
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

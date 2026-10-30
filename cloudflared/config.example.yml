@@ -1,0 +1,52 @@
+# ==============================================================================
+# Cloudflare Tunnel Configuration (cloudflared)
+# ZeroTrust Campus — Private Backend Origin Protection
+# ==============================================================================
+# Ingress configuration keeps the Express server and SQLite database private.
+# No inbound firewall ports (3001) need to be opened on your host server.
+# All inbound requests must arrive through Cloudflare's edge with Access policies enforced.
+
+tunnel: <YOUR-TUNNEL-UUID>
+credentials-file: /etc/cloudflared/<YOUR-TUNNEL-UUID>.json
+
+ingress:
+  # --------------------------------------------------------------------------
+  # PATTERN A: Unified Single-Domain (Recommended)
+  # Both Frontend & Backend share one hostname (e.g., campus.yourdomain.edu)
+  # - Single Cloudflare Access Application & Single AUD Tag
+  # - Eliminates cross-origin CORS complexity and token mismatch
+  # --------------------------------------------------------------------------
+  # Route /api/* requests to the private Node.js/Express origin
+  - hostname: campus.yourdomain.edu
+    path: ^/api/
+    service: http://127.0.0.1:3001
+    originRequest:
+      connectTimeout: 15s
+      noTLSVerify: false
+      httpHostHeader: campus.yourdomain.edu
+
+  # Route all other requests on campus.yourdomain.edu to the Frontend static/SSR service
+  - hostname: campus.yourdomain.edu
+    service: http://127.0.0.1:5173
+    originRequest:
+      connectTimeout: 15s
+
+  # --------------------------------------------------------------------------
+  # PATTERN B: Dedicated Subdomain (Alternative)
+  # When Backend API and Frontend Portal are on separate subdomains.
+  # IMPORTANT: In Cloudflare Zero Trust, create an Access Application specifically
+  # protecting 'api.campus.yourdomain.edu', and set CLOUDFLARE_ACCESS_AUD in backend/.env
+  # to THAT application's AUD tag (NOT the frontend portal's AUD tag).
+  # --------------------------------------------------------------------------
+  # - hostname: api.campus.yourdomain.edu
+  #   service: http://127.0.0.1:3001
+  #   originRequest:
+  #     connectTimeout: 15s
+  #     noTLSVerify: false
+  #     httpHostHeader: api.campus.yourdomain.edu
+
+  # --------------------------------------------------------------------------
+  # Mandatory Catch-All Rule (Required by cloudflared daemon)
+  # Drops/rejects all traffic not matching configured hostnames/paths.
+  # --------------------------------------------------------------------------
+  - service: http_status:404
